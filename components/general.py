@@ -130,3 +130,26 @@ class GeneralCommands(commands.Component):
             "Commands: "
             "https://floofercommands.builtbybuzz.dev"
         )
+
+    @commands.command(
+        name="discord",
+        aliases=["server"],
+    )
+    @site_command(
+        description="pastes the discord invite for Silas's Discord server.",
+        category="General",
+        permission="Everyone",
+        usage="!discord",
+    )
+    async def discord(
+        self,
+        ctx: commands.Context,
+    ) -> None:
+        """
+        Displays the Discord invite for Silas's Discord server.
+        """
+
+        await ctx.send(
+            "Join the Discord server: "
+            "https://discord.gg/QwJJ2M877z"
+        )

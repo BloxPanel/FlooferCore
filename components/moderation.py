@@ -244,3 +244,274 @@ class ModerationCommands(commands.Component):
         )
 
         # Intentionally no success message in Twitch chat.
+
+        # ========================================================
+    # BAN
+    # ========================================================
+
+    @commands.command(
+        name="ban",
+    )
+    @site_command(
+        description="Permanently bans a user from chat.",
+        category="Moderation",
+        permission="Moderators",
+        usage="!ban <username> [reason]",
+    )
+    async def ban(
+        self,
+        ctx: commands.Context,
+        username: str | None = None,
+        *,
+        reason: str | None = None,
+    ) -> None:
+
+        # ----------------------------------------------------
+        # PERMISSION CHECK
+        # ----------------------------------------------------
+
+        if not is_moderator(ctx):
+            return
+
+        # ----------------------------------------------------
+        # ARGUMENT CHECK
+        # ----------------------------------------------------
+
+        if username is None:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, usage: "
+                "!ban <username> [reason]"
+            )
+            return
+
+        username = username.lstrip("@")
+
+        # ----------------------------------------------------
+        # REASON LENGTH
+        # ----------------------------------------------------
+
+        if reason and len(reason) > 500:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "ban reasons cannot exceed 500 characters."
+            )
+            return
+
+        # ----------------------------------------------------
+        # RESOLVE USER
+        # ----------------------------------------------------
+
+        try:
+            users = await self.bot.fetch_users(
+                logins=[username]
+            )
+
+        except Exception as error:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "I couldn't look that user up."
+            )
+
+            print(
+                "[MODERATION] Failed to resolve "
+                f"{username}: {error}"
+            )
+
+            return
+
+        if not users:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                f"I couldn't find Twitch user @{username}."
+            )
+            return
+
+        target = users[0]
+
+        # ----------------------------------------------------
+        # SELF PROTECTION
+        # ----------------------------------------------------
+
+        if str(target.id) == str(ctx.chatter.id):
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "you can't ban yourself through FlooferCore."
+            )
+            return
+
+        # ----------------------------------------------------
+        # BOT PROTECTION
+        # ----------------------------------------------------
+
+        if str(target.id) == str(self.bot.bot_id):
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "nice try."
+            )
+            return
+
+        # ----------------------------------------------------
+        # APPLY BAN
+        # ----------------------------------------------------
+
+        try:
+            broadcaster = self.bot.create_partialuser(
+                user_id=self.bot.owner_id
+            )
+
+            await broadcaster.ban_user(
+                moderator=self.bot.bot_id,
+                user=target.id,
+                reason=reason,
+                token_for=self.bot.bot_id,
+            )
+
+        except Exception as error:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                f"I couldn't ban @{target.display_name}."
+            )
+
+            print(
+                "[MODERATION] Ban failed | "
+                f"Moderator: {ctx.chatter.name} "
+                f"({ctx.chatter.id}) | "
+                f"Target: {target.name} "
+                f"({target.id}) | "
+                f"Reason: {reason!r} | "
+                f"Error: {error}"
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # LOG SUCCESS
+        # ----------------------------------------------------
+
+        print(
+            "[MODERATION] Ban successful | "
+            f"Moderator: {ctx.chatter.name} "
+            f"({ctx.chatter.id}) | "
+            f"Target: {target.name} "
+            f"({target.id}) | "
+            f"Reason: {reason!r}"
+        )
+
+        # Intentionally silent in Twitch chat.
+
+
+    # ========================================================
+    # UNBAN
+    # ========================================================
+
+    @commands.command(
+        name="unban",
+    )
+    @site_command(
+        description="Removes a user's ban or timeout.",
+        category="Moderation",
+        permission="Moderators",
+        usage="!unban <username>",
+    )
+    async def unban(
+        self,
+        ctx: commands.Context,
+        username: str | None = None,
+    ) -> None:
+
+        # ----------------------------------------------------
+        # PERMISSION CHECK
+        # ----------------------------------------------------
+
+        if not is_moderator(ctx):
+            return
+
+        # ----------------------------------------------------
+        # ARGUMENT CHECK
+        # ----------------------------------------------------
+
+        if username is None:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, usage: "
+                "!unban <username>"
+            )
+            return
+
+        username = username.lstrip("@")
+
+        # ----------------------------------------------------
+        # RESOLVE USER
+        # ----------------------------------------------------
+
+        try:
+            users = await self.bot.fetch_users(
+                logins=[username]
+            )
+
+        except Exception as error:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "I couldn't look that user up."
+            )
+
+            print(
+                "[MODERATION] Failed to resolve "
+                f"{username}: {error}"
+            )
+
+            return
+
+        if not users:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                f"I couldn't find Twitch user @{username}."
+            )
+            return
+
+        target = users[0]
+
+        # ----------------------------------------------------
+        # REMOVE BAN / TIMEOUT
+        # ----------------------------------------------------
+
+        try:
+            broadcaster = self.bot.create_partialuser(
+                user_id=self.bot.owner_id
+            )
+
+            await broadcaster.unban_user(
+                moderator=self.bot.bot_id,
+                user_id=target.id,
+                token_for=self.bot.bot_id,
+            )
+
+        except Exception as error:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                f"I couldn't unban @{target.display_name}."
+            )
+
+            print(
+                "[MODERATION] Unban failed | "
+                f"Moderator: {ctx.chatter.name} "
+                f"({ctx.chatter.id}) | "
+                f"Target: {target.name} "
+                f"({target.id}) | "
+                f"Error: {error}"
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # LOG SUCCESS
+        # ----------------------------------------------------
+
+        print(
+            "[MODERATION] Unban successful | "
+            f"Moderator: {ctx.chatter.name} "
+            f"({ctx.chatter.id}) | "
+            f"Target: {target.name} "
+            f"({target.id})"
+        )
+
+        # Intentionally silent in Twitch chat.
