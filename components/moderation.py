@@ -45,3 +45,177 @@ class ModerationCommands(commands.Component):
             f"@{ctx.chatter.display_name}, "
             "moderator permissions confirmed."
         )
+
+    # ========================================================
+    # TIMEOUT
+    # ========================================================
+
+    @commands.command(
+        name="timeout",
+        aliases=["to", "mute"],
+    )
+    @site_command(
+        description="Times a user out from chat.",
+        category="Moderation",
+        permission="Moderators",
+        usage="!timeout <username> <seconds> [reason]",
+    )
+    async def timeout(
+        self,
+        ctx: commands.Context,
+        username: str | None = None,
+        duration: str | None = None,
+        *,
+        reason: str | None = None,
+    ) -> None:
+
+        # ----------------------------------------------------
+        # PERMISSION CHECK
+        # ----------------------------------------------------
+
+        if not is_moderator(ctx):
+            return
+
+        # ----------------------------------------------------
+        # ARGUMENT CHECK
+        # ----------------------------------------------------
+
+        if username is None or duration is None:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, usage: "
+                "!timeout <username> <seconds> [reason]"
+            )
+            return
+
+        # Allow @username as well as username
+        username = username.lstrip("@")
+
+        # ----------------------------------------------------
+        # DURATION
+        # ----------------------------------------------------
+
+        try:
+            duration_seconds = int(duration)
+
+        except ValueError:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "timeout duration must be a number of seconds."
+            )
+            return
+
+        # Twitch limits timeouts to:
+        # 1 second -> 1,209,600 seconds (2 weeks)
+
+        if not 1 <= duration_seconds <= 1_209_600:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "timeout duration must be between "
+                "1 second and 2 weeks."
+            )
+            return
+
+        # ----------------------------------------------------
+        # RESOLVE USER
+        # ----------------------------------------------------
+
+        try:
+            users = await self.bot.fetch_users(
+                logins=[username]
+            )
+
+        except Exception as error:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "I couldn't look that user up."
+            )
+
+            print(
+                "[MODERATION] Failed to resolve "
+                f"{username}: {error}"
+            )
+
+            return
+
+        if not users:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                f"I couldn't find Twitch user @{username}."
+            )
+            return
+
+        target = users[0]
+
+        # ----------------------------------------------------
+        # SELF PROTECTION
+        # ----------------------------------------------------
+
+        if str(target.id) == str(ctx.chatter.id):
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "you can't timeout yourself through FlooferCore."
+            )
+            return
+
+        # ----------------------------------------------------
+        # BOT PROTECTION
+        # ----------------------------------------------------
+
+        if str(target.id) == str(self.bot.bot_id):
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                "nice try. I'm not timing myself out."
+            )
+            return
+
+        # ----------------------------------------------------
+        # APPLY TIMEOUT
+        # ----------------------------------------------------
+
+        try:
+            broadcaster = self.bot.create_partialuser(
+                user_id=self.bot.owner_id
+            )
+
+            await broadcaster.timeout_user(
+                moderator=self.bot.bot_id,
+                user=target.id,
+                duration=duration_seconds,
+                reason=reason,
+                token_for=self.bot.bot_id,
+            )
+
+        except Exception as error:
+            await ctx.send(
+                f"@{ctx.chatter.display_name}, "
+                f"I couldn't timeout @{target.display_name}."
+            )
+
+            print(
+                "[MODERATION] Timeout failed | "
+                f"Moderator: {ctx.chatter.name} "
+                f"({ctx.chatter.id}) | "
+                f"Target: {target.name} "
+                f"({target.id}) | "
+                f"Duration: {duration_seconds} | "
+                f"Reason: {reason!r} | "
+                f"Error: {error}"
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # LOG SUCCESS
+        # ----------------------------------------------------
+
+        print(
+            "[MODERATION] Timeout successful | "
+            f"Moderator: {ctx.chatter.name} "
+            f"({ctx.chatter.id}) | "
+            f"Target: {target.name} "
+            f"({target.id}) | "
+            f"Duration: {duration_seconds}s | "
+            f"Reason: {reason!r}"
+        )
+
+        # Intentionally no success message in Twitch chat.
