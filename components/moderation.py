@@ -83,7 +83,7 @@ class ModerationCommands(commands.Component):
         description="Times a user out from chat.",
         category="Moderation",
         permission="Moderators",
-        usage="!timeout <username> <seconds> [reason]",
+        usage="!timeout <username> <duration (s, m, h, d)> [reason]",
     )
     async def timeout(
         self,
