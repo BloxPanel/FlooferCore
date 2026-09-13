@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 .tio.tokens.json
+logs/
+.floofercore.pid
+deploy.ps1
