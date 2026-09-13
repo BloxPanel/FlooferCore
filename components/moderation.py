@@ -6,6 +6,31 @@ from utils.permissions import (
 )
 from utils.site_commands import site_command
 
+def parse_duration(value: str) -> int:
+    value = value.strip().lower()
+
+    if value.isdigit():
+        return int(value)
+
+    unit = value[-1]
+    number = value[:-1]
+
+    if not number.isdigit():
+        raise ValueError("Invalid duration format")
+
+    amount = int(number)
+
+    multipliers = {
+        "s": 1,
+        "m": 60,
+        "h": 3600,
+        "d": 86400,
+    }
+
+    if unit not in multipliers:
+        raise ValueError("Invalid duration unit")
+
+    return amount * multipliers[unit]
 
 class ModerationCommands(commands.Component):
     def __init__(self, bot):
@@ -95,12 +120,12 @@ class ModerationCommands(commands.Component):
         # ----------------------------------------------------
 
         try:
-            duration_seconds = int(duration)
+            duration_seconds = parse_duration(duration)
 
         except ValueError:
             await ctx.send(
                 f"@{ctx.chatter.display_name}, "
-                "timeout duration must be a number of seconds."
+                    "timeout duration must be a number of seconds."
             )
             return
 
