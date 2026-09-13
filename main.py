@@ -9,6 +9,7 @@ from twitchio.ext import commands
 from dotenv import load_dotenv
 
 from components.general import GeneralCommands
+from components.moderation import ModerationCommands
 
 
 # ============================================================
@@ -96,8 +97,16 @@ class FlooferCore(commands.Bot):
             GeneralCommands(self)
         )
 
+        await self.add_component(
+            ModerationCommands(self)
+        )
+
         LOGGER.info(
             "Loaded component: GeneralCommands"
+        )
+
+        LOGGER.info(
+            "Loaded component: ModerationCommands"
         )
 
         # ----------------------------------------------------

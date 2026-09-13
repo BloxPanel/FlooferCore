@@ -6,6 +6,7 @@ from pathlib import Path
 from twitchio.ext import commands
 
 from components.general import GeneralCommands
+from components.moderation import ModerationCommands
 
 
 # ============================================================
@@ -35,6 +36,7 @@ OUTPUT_FILE = Path("website/commands.json")
 
 COMPONENTS = [
     GeneralCommands,
+    ModerationCommands,
 ]
 
 
