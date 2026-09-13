@@ -1,0 +1,41 @@
+{
+    "updated_at": "2026-09-13T04:37:09.102648+00:00",
+    "commands": [
+        {
+            "name": "commands",
+            "aliases": [
+                "help"
+            ],
+            "description": "Shows the available FlooferCore commands.",
+            "category": "General",
+            "permission": "Everyone",
+            "usage": "!commands"
+        },
+        {
+            "name": "hello",
+            "aliases": [
+                "hi"
+            ],
+            "description": "FlooferCore says hello to you.",
+            "category": "General",
+            "permission": "Everyone",
+            "usage": "!hello"
+        },
+        {
+            "name": "ping",
+            "aliases": [],
+            "description": "Checks whether FlooferCore is online and responding.",
+            "category": "General",
+            "permission": "Everyone",
+            "usage": "!ping"
+        },
+        {
+            "name": "uptime",
+            "aliases": [],
+            "description": "Shows how long FlooferCore has been running.",
+            "category": "General",
+            "permission": "Everyone",
+            "usage": "!uptime"
+        }
+    ]
+}

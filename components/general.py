@@ -2,6 +2,8 @@ import time
 
 from twitchio.ext import commands
 
+from utils.site_commands import site_command
+
 
 class GeneralCommands(commands.Component):
     def __init__(self, bot):
@@ -12,6 +14,12 @@ class GeneralCommands(commands.Component):
     # ========================================================
 
     @commands.command(name="ping")
+    @site_command(
+        description="Checks whether FlooferCore is online and responding.",
+        category="General",
+        permission="Everyone",
+        usage="!ping",
+    )
     async def ping(self, ctx: commands.Context) -> None:
         """
         Basic test command to make sure FlooferCore is alive.
@@ -23,7 +31,16 @@ class GeneralCommands(commands.Component):
     # HELLO
     # ========================================================
 
-    @commands.command(name="hello", aliases=["hi"])
+    @commands.command(
+        name="hello",
+        aliases=["hi"],
+    )
+    @site_command(
+        description="FlooferCore says hello to you.",
+        category="General",
+        permission="Everyone",
+        usage="!hello",
+    )
     async def hello(self, ctx: commands.Context) -> None:
         """
         Say hello to whoever used the command.
@@ -38,39 +55,78 @@ class GeneralCommands(commands.Component):
     # ========================================================
 
     @commands.command(name="uptime")
+    @site_command(
+        description="Shows how long FlooferCore has been running.",
+        category="General",
+        permission="Everyone",
+        usage="!uptime",
+    )
     async def uptime(self, ctx: commands.Context) -> None:
         """
         Shows how long FlooferCore itself has been running.
         """
 
-        elapsed = time.monotonic() - self.bot.started_at
+        elapsed = (
+            time.monotonic()
+            - self.bot.started_at
+        )
 
-        hours, remainder = divmod(int(elapsed), 3600)
-        minutes, seconds = divmod(remainder, 60)
+        hours, remainder = divmod(
+            int(elapsed),
+            3600,
+        )
+
+        minutes, seconds = divmod(
+            remainder,
+            60,
+        )
 
         if hours > 0:
-            uptime_text = f"{hours}h {minutes}m {seconds}s"
+            uptime_text = (
+                f"{hours}h "
+                f"{minutes}m "
+                f"{seconds}s"
+            )
 
         elif minutes > 0:
-            uptime_text = f"{minutes}m {seconds}s"
+            uptime_text = (
+                f"{minutes}m "
+                f"{seconds}s"
+            )
 
         else:
-            uptime_text = f"{seconds}s"
+            uptime_text = (
+                f"{seconds}s"
+            )
 
         await ctx.send(
-            f"FlooferCore has been online for {uptime_text}."
+            f"FlooferCore has been online for "
+            f"{uptime_text}."
         )
 
     # ========================================================
     # COMMANDS
     # ========================================================
 
-    @commands.command(name="commands", aliases=["help"])
-    async def commands_list(self, ctx: commands.Context) -> None:
+    @commands.command(
+        name="commands",
+        aliases=["help"],
+    )
+    @site_command(
+        description="Shows the available FlooferCore commands.",
+        category="General",
+        permission="Everyone",
+        usage="!commands",
+    )
+    async def commands_list(
+        self,
+        ctx: commands.Context,
+    ) -> None:
         """
-        Displays the basic FlooferCore commands.
+        Displays the FlooferCore command website.
         """
 
         await ctx.send(
-            "Commands: !ping | !hello | !uptime | !commands"
+            "Commands: "
+            "https://floofercommands.builtbybuzz.dev"
         )

@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>FlooferCore Commands</title>
+
+    <meta
+        name="description"
+        content="Official command reference for FlooferCore."
+    >
+
+    <style>
+        :root {
+            --background: #080b12;
+            --background-secondary: #0d1220;
+
+            --glass: rgba(18, 25, 42, 0.72);
+            --glass-hover: rgba(25, 35, 58, 0.92);
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(94, 180, 255, 0.35);
+
+            --text: #f5f7fb;
+            --muted: #9aa6ba;
+            --muted-dark: #68768d;
+
+            --accent: #5eb4ff;
+            --accent-secondary: #7c6cff;
+
+            --success: #6ee7a8;
+            --warning: #ffd166;
+            --danger: #ff7b7b;
+
+            --shadow: rgba(0, 0, 0, 0.35);
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(94, 180, 255, 0.12),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at top right,
+                    rgba(124, 108, 255, 0.12),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--background),
+                    var(--background-secondary)
+                );
+
+            background-attachment: fixed;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        header {
+            padding: 70px 20px 45px;
+
+            text-align: center;
+        }
+
+
+        .logo {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 78px;
+            height: 78px;
+
+            margin:
+                0 auto
+                20px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--accent),
+                    var(--accent-secondary)
+                );
+
+            box-shadow:
+                0 18px 50px
+                rgba(94, 180, 255, 0.22);
+
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+
+        h1 {
+            font-size:
+                clamp(
+                    2.5rem,
+                    7vw,
+                    4.5rem
+                );
+
+            letter-spacing: -0.05em;
+        }
+
+
+        .subtitle {
+            max-width: 700px;
+
+            margin:
+                16px auto
+                0;
+
+            color: var(--muted);
+
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+
+        .channel-badge {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding:
+                8px 14px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 999px;
+
+            background:
+                rgba(255, 255, 255, 0.04);
+
+            color: var(--muted);
+
+            backdrop-filter: blur(14px);
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        main {
+            width:
+                min(
+                    1100px,
+                    calc(100% - 32px)
+                );
+
+            margin:
+                0 auto
+                90px;
+        }
+
+
+        /* =========================================================
+           INFO BAR
+        ========================================================= */
+
+        .info-bar {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 22px;
+
+            padding: 14px 18px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 16px;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+            color: var(--muted);
+
+            backdrop-filter: blur(16px);
+        }
+
+
+        #command-count {
+            color: var(--text);
+
+            font-weight: 600;
+        }
+
+
+        #last-updated {
+            color: var(--muted-dark);
+
+            font-size: 0.9rem;
+        }
+
+
+        /* =========================================================
+           SEARCH
+        ========================================================= */
+
+        .search-container {
+            position: sticky;
+
+            top: 16px;
+
+            z-index: 10;
+
+            margin-bottom: 38px;
+        }
+
+
+        #search {
+            width: 100%;
+
+            padding:
+                17px 20px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 18px;
+
+            outline: none;
+
+            background:
+                rgba(10, 15, 26, 0.86);
+
+            color: var(--text);
+
+            font-size: 1rem;
+
+            box-shadow:
+                0 15px 40px
+                var(--shadow);
+
+            backdrop-filter:
+                blur(22px);
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        #search:focus {
+            border-color:
+                var(--accent);
+
+            box-shadow:
+                0 15px 45px
+                rgba(94, 180, 255, 0.12);
+        }
+
+
+        #search::placeholder {
+            color: #66748b;
+        }
+
+
+        /* =========================================================
+           CATEGORY
+        ========================================================= */
+
+        .category {
+            margin-top: 45px;
+        }
+
+
+        .category-header {
+            margin-bottom: 18px;
+        }
+
+
+        .category-header h2 {
+            font-size: 1.55rem;
+        }
+
+
+        .category-header p {
+            margin-top: 5px;
+
+            color: var(--muted);
+        }
+
+
+        /* =========================================================
+           COMMAND GRID
+        ========================================================= */
+
+        .command-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(280px, 1fr)
+                );
+
+            gap: 15px;
+        }
+
+
+        .command-card {
+            padding: 20px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 20px;
+
+            background:
+                var(--glass);
+
+            box-shadow:
+                0 12px 35px
+                rgba(0, 0, 0, 0.18);
+
+            backdrop-filter:
+                blur(16px);
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .command-card:hover {
+            transform:
+                translateY(-3px);
+
+            border-color:
+                var(--border-hover);
+
+            background:
+                var(--glass-hover);
+        }
+
+
+        .command-name {
+            display: inline-block;
+
+            margin-bottom: 10px;
+
+            color: var(--accent);
+
+            font-family:
+                "Cascadia Code",
+                "JetBrains Mono",
+                Consolas,
+                monospace;
+
+            font-size: 1.05rem;
+
+            font-weight: 700;
+        }
+
+
+        .description {
+            color: var(--muted);
+
+            line-height: 1.5;
+        }
+
+
+        .aliases {
+            margin-top: 12px;
+
+            color: var(--muted-dark);
+
+            font-size: 0.88rem;
+        }
+
+
+        .usage {
+            margin-top: 12px;
+
+            padding: 8px 10px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(0, 0, 0, 0.18);
+
+            color: #c4d0e3;
+
+            font-family:
+                "Cascadia Code",
+                "JetBrains Mono",
+                Consolas,
+                monospace;
+
+            font-size: 0.82rem;
+        }
+
+
+        .permission {
+            display: inline-block;
+
+            margin-top: 14px;
+
+            padding:
+                5px 9px;
+
+            border-radius: 8px;
+
+            background:
+                rgba(94, 180, 255, 0.08);
+
+            color: #8ccaff;
+
+            font-size: 0.78rem;
+
+            font-weight: 600;
+        }
+
+
+        .permission.moderator {
+            background:
+                rgba(255, 209, 102, 0.08);
+
+            color:
+                var(--warning);
+        }
+
+
+        .permission.broadcaster {
+            background:
+                rgba(255, 123, 123, 0.08);
+
+            color:
+                var(--danger);
+        }
+
+
+        /* =========================================================
+           STATUS / ERROR
+        ========================================================= */
+
+        .status-message {
+            margin-top: 50px;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+
+        #error-message {
+            display: none;
+
+            color: var(--danger);
+        }
+
+
+        #no-results {
+            display: none;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            padding:
+                35px 20px;
+
+            border-top:
+                1px solid
+                var(--border);
+
+            text-align: center;
+
+            color: var(--muted-dark);
+        }
+
+
+        footer strong {
+            color: var(--text);
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 600px) {
+
+            header {
+                padding-top: 45px;
+            }
+
+
+            .command-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .search-container {
+                top: 10px;
+            }
+
+
+            .info-bar {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="logo">
+        F
+    </div>
+
+    <h1>
+        FlooferCore
+    </h1>
+
+    <p class="subtitle">
+        Official Twitch command reference for FlooferCore.
+        Commands shown here are loaded automatically from the bot's
+        command database.
+    </p>
+
+    <div class="channel-badge">
+        Twitch • SilasDaFloofer
+    </div>
+
+</header>
+
+
+<main>
+
+    <!-- =====================================================
+         INFO
+    ====================================================== -->
+
+    <div class="info-bar">
+
+        <span>
+            <span id="command-count">
+                Loading commands...
+            </span>
+        </span>
+
+        <span id="last-updated"></span>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <div class="search-container">
+
+        <input
+            id="search"
+            type="text"
+            placeholder="Search commands, aliases, descriptions..."
+            autocomplete="off"
+        >
+
+    </div>
+
+
+    <!-- =====================================================
+         GENERATED COMMANDS
+    ====================================================== -->
+
+    <div id="commands-container"></div>
+
+
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
+
+    <div
+        id="loading-message"
+        class="status-message"
+    >
+        Loading FlooferCore commands...
+    </div>
+
+
+    <div
+        id="error-message"
+        class="status-message"
+    >
+        FlooferCore's command list could not be loaded.
+    </div>
+
+
+    <div
+        id="no-results"
+        class="status-message"
+    >
+        No commands matched your search.
+    </div>
+
+</main>
+
+
+<footer>
+
+    <p>
+        Powered by
+        <strong>FlooferCore</strong>
+        • Built by Buzz
+    </p>
+
+</footer>
+
+
+<script>
+
+    // ============================================================
+    // ELEMENTS
+    // ============================================================
+
+    const commandsContainer =
+        document.getElementById(
+            "commands-container"
+        );
+
+    const searchInput =
+        document.getElementById(
+            "search"
+        );
+
+    const commandCount =
+        document.getElementById(
+            "command-count"
+        );
+
+    const lastUpdated =
+        document.getElementById(
+            "last-updated"
+        );
+
+    const loadingMessage =
+        document.getElementById(
+            "loading-message"
+        );
+
+    const errorMessage =
+        document.getElementById(
+            "error-message"
+        );
+
+    const noResults =
+        document.getElementById(
+            "no-results"
+        );
+
+
+    // ============================================================
+    // COMMAND DATA
+    // ============================================================
+
+    let allCommands = [];
+
+
+    // ============================================================
+    // ESCAPE HTML
+    // ============================================================
+
+    function escapeHTML(value) {
+
+        return String(value)
+
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+
+            .replaceAll(
+                ">",
+                "&gt;"
+            )
+
+            .replaceAll(
+                "\"",
+                "&quot;"
+            )
+
+            .replaceAll(
+                "'",
+                "&#039;"
+            );
+    }
+
+
+    // ============================================================
+    // PERMISSION CLASS
+    // ============================================================
+
+    function getPermissionClass(
+        permission
+    ) {
+
+        const normalized =
+            permission
+                .toLowerCase();
+
+        if (
+            normalized.includes(
+                "moderator"
+            )
+        ) {
+            return "moderator";
+        }
+
+        if (
+            normalized.includes(
+                "broadcaster"
+            ) ||
+            normalized.includes(
+                "owner"
+            )
+        ) {
+            return "broadcaster";
+        }
+
+        return "";
+    }
+
+
+    // ============================================================
+    // GROUP COMMANDS
+    // ============================================================
+
+    function groupCommands(
+        commands
+    ) {
+
+        const groups = {};
+
+
+        commands.forEach(
+            command => {
+
+                const category =
+                    command.category
+                    || "Other";
+
+                if (
+                    !groups[category]
+                ) {
+                    groups[category] = [];
+                }
+
+                groups[category].push(
+                    command
+                );
+            }
+        );
+
+
+        return groups;
+    }
+
+
+    // ============================================================
+    // CREATE COMMAND CARD
+    // ============================================================
+
+    function createCommandCard(
+        command
+    ) {
+
+        const aliases =
+            Array.isArray(
+                command.aliases
+            )
+            ? command.aliases
+            : [];
+
+
+        const aliasHTML =
+            aliases.length > 0
+
+            ? `
+                <p class="aliases">
+                    Aliases:
+                    ${aliases
+                        .map(
+                            alias =>
+                                "!" +
+                                escapeHTML(alias)
+                        )
+                        .join(", ")
+                    }
+                </p>
+            `
+
+            : "";
+
+
+        const usageHTML =
+            command.usage
+
+            ? `
+                <div class="usage">
+                    ${escapeHTML(
+                        command.usage
+                    )}
+                </div>
+            `
+
+            : "";
+
+
+        const permission =
+            command.permission
+            || "Everyone";
+
+
+        const permissionClass =
+            getPermissionClass(
+                permission
+            );
+
+
+        return `
+            <article class="command-card">
+
+                <div class="command-name">
+                    !${escapeHTML(
+                        command.name
+                    )}
+                </div>
+
+                <p class="description">
+                    ${escapeHTML(
+                        command.description
+                        || "No description available."
+                    )}
+                </p>
+
+                ${aliasHTML}
+
+                ${usageHTML}
+
+                <span
+                    class="
+                        permission
+                        ${permissionClass}
+                    "
+                >
+                    ${escapeHTML(
+                        permission
+                    )}
+                </span>
+
+            </article>
+        `;
+    }
+
+
+    // ============================================================
+    // RENDER COMMANDS
+    // ============================================================
+
+    function renderCommands(
+        commands
+    ) {
+
+        commandsContainer.innerHTML = "";
+
+
+        if (
+            commands.length === 0
+        ) {
+
+            noResults.style.display =
+                "block";
+
+            return;
+        }
+
+
+        noResults.style.display =
+            "none";
+
+
+        const groups =
+            groupCommands(
+                commands
+            );
+
+
+        for (
+            const [
+                category,
+                categoryCommands
+            ]
+            of Object.entries(groups)
+        ) {
+
+            const section =
+                document.createElement(
+                    "section"
+                );
+
+
+            section.className =
+                "category";
+
+
+            const cardsHTML =
+                categoryCommands
+
+                    .map(
+                        createCommandCard
+                    )
+
+                    .join("");
+
+
+            section.innerHTML = `
+
+                <div class="category-header">
+
+                    <h2>
+                        ${escapeHTML(category)}
+                    </h2>
+
+                    <p>
+                        ${categoryCommands.length}
+                        command${categoryCommands.length === 1 ? "" : "s"}
+                    </p>
+
+                </div>
+
+
+                <div class="command-grid">
+                    ${cardsHTML}
+                </div>
+            `;
+
+
+            commandsContainer.appendChild(
+                section
+            );
+        }
+    }
+
+
+    // ============================================================
+    // SEARCH
+    // ============================================================
+
+    function filterCommands() {
+
+        const query =
+            searchInput
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        if (
+            query === ""
+        ) {
+
+            renderCommands(
+                allCommands
+            );
+
+            return;
+        }
+
+
+        const filtered =
+            allCommands.filter(
+                command => {
+
+                    const aliases =
+                        Array.isArray(
+                            command.aliases
+                        )
+
+                        ? command.aliases.join(
+                            " "
+                        )
+
+                        : "";
+
+
+                    const searchable =
+                        [
+                            command.name,
+                            aliases,
+                            command.description,
+                            command.category,
+                            command.permission,
+                            command.usage
+                        ]
+
+                        .filter(Boolean)
+
+                        .join(" ")
+
+                        .toLowerCase();
+
+
+                    return searchable.includes(
+                        query
+                    );
+                }
+            );
+
+
+        renderCommands(
+            filtered
+        );
+    }
+
+
+    // ============================================================
+    // LOAD COMMANDS.JSON
+    // ============================================================
+
+    async function loadCommands() {
+
+        try {
+
+            /*
+                Date.now() prevents the browser from showing
+                a stale cached copy after commands.json changes.
+            */
+
+            const response =
+                await fetch(
+                    `commands.json?v=${Date.now()}`
+                );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+            }
+
+
+            const data =
+                await response.json();
+
+
+            /*
+                Supports either:
+
+                [
+                    {...},
+                    {...}
+                ]
+
+                OR:
+
+                {
+                    "updated_at": "...",
+                    "commands": [...]
+                }
+            */
+
+            if (
+                Array.isArray(data)
+            ) {
+
+                allCommands =
+                    data;
+
+            } else {
+
+                allCommands =
+                    Array.isArray(
+                        data.commands
+                    )
+
+                    ? data.commands
+
+                    : [];
+
+
+                if (
+                    data.updated_at
+                ) {
+
+                    const date =
+                        new Date(
+                            data.updated_at
+                        );
+
+
+                    lastUpdated.textContent =
+                        `Updated ${date.toLocaleString()}`;
+                }
+            }
+
+
+            /*
+                Alphabetical sorting:
+
+                category first
+                command second
+            */
+
+            allCommands.sort(
+                (a, b) => {
+
+                    const categoryCompare =
+                        (
+                            a.category
+                            || ""
+                        )
+                        .localeCompare(
+                            b.category
+                            || ""
+                        );
+
+
+                    if (
+                        categoryCompare !== 0
+                    ) {
+                        return categoryCompare;
+                    }
+
+
+                    return (
+                        a.name
+                        || ""
+                    )
+                    .localeCompare(
+                        b.name
+                        || ""
+                    );
+                }
+            );
+
+
+            loadingMessage.style.display =
+                "none";
+
+
+            errorMessage.style.display =
+                "none";
+
+
+            commandCount.textContent =
+                `${allCommands.length} command${
+                    allCommands.length === 1
+                        ? ""
+                        : "s"
+                } available`;
+
+
+            renderCommands(
+                allCommands
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load commands:",
+                error
+            );
+
+
+            loadingMessage.style.display =
+                "none";
+
+
+            errorMessage.style.display =
+                "block";
+
+
+            commandCount.textContent =
+                "Command list unavailable";
+        }
+    }
+
+
+    // ============================================================
+    // EVENTS
+    // ============================================================
+
+    searchInput.addEventListener(
+        "input",
+        filterCommands
+    );
+
+
+    // ============================================================
+    // START
+    // ============================================================
+
+    loadCommands();
+
+</script>
+
+
+</body>
+</html>
