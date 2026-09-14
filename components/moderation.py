@@ -1,36 +1,12 @@
 from twitchio.ext import commands
 
+from utils.durations import parse_duration
 from utils.permissions import (
     is_broadcaster,
     is_moderator,
 )
 from utils.site_commands import site_command
 
-def parse_duration(value: str) -> int:
-    value = value.strip().lower()
-
-    if value.isdigit():
-        return int(value)
-
-    unit = value[-1]
-    number = value[:-1]
-
-    if not number.isdigit():
-        raise ValueError("Invalid duration format")
-
-    amount = int(number)
-
-    multipliers = {
-        "s": 1,
-        "m": 60,
-        "h": 3600,
-        "d": 86400,
-    }
-
-    if unit not in multipliers:
-        raise ValueError("Invalid duration unit")
-
-    return amount * multipliers[unit]
 
 class ModerationCommands(commands.Component):
     def __init__(self, bot):
@@ -83,7 +59,7 @@ class ModerationCommands(commands.Component):
         description="Times a user out from chat.",
         category="Moderation",
         permission="Moderators",
-        usage="!timeout <username> <duration (s, m, h, d)> [reason]",
+        usage="!timeout <username> <duration> [reason]",
     )
     async def timeout(
         self,
@@ -108,11 +84,11 @@ class ModerationCommands(commands.Component):
         if username is None or duration is None:
             await ctx.send(
                 f"@{ctx.chatter.display_name}, usage: "
-                "!timeout <username> <seconds> [reason]"
+                "!timeout <username> <duration> [reason] "
+                "(examples: 60s, 5m, 2h, 1d)"
             )
             return
 
-        # Allow @username as well as username
         username = username.lstrip("@")
 
         # ----------------------------------------------------
@@ -125,7 +101,8 @@ class ModerationCommands(commands.Component):
         except ValueError:
             await ctx.send(
                 f"@{ctx.chatter.display_name}, "
-                    "timeout duration must be a number of seconds."
+                "invalid timeout duration. Use formats like "
+                "60s, 5m, 2h, or 1d."
             )
             return
 
@@ -243,9 +220,9 @@ class ModerationCommands(commands.Component):
             f"Reason: {reason!r}"
         )
 
-        # Intentionally no success message in Twitch chat.
+        # Intentionally silent in Twitch chat.
 
-        # ========================================================
+    # ========================================================
     # BAN
     # ========================================================
 
@@ -399,13 +376,13 @@ class ModerationCommands(commands.Component):
 
         # Intentionally silent in Twitch chat.
 
-
     # ========================================================
     # UNBAN
     # ========================================================
 
     @commands.command(
         name="unban",
+        aliases=["untimeout"],
     )
     @site_command(
         description="Removes a user's ban or timeout.",

@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 from components.general import GeneralCommands
 from components.moderation import ModerationCommands
+from components.stream import StreamCommands
 
 
 # ============================================================
@@ -98,6 +99,10 @@ class FlooferCore(commands.Bot):
         )
 
         await self.add_component(
+            StreamCommands(self)
+        )
+
+        await self.add_component(
             ModerationCommands(self)
         )
 
@@ -107,6 +112,10 @@ class FlooferCore(commands.Bot):
 
         LOGGER.info(
             "Loaded component: ModerationCommands"
+        )
+
+        LOGGER.info(
+            "Loaded component: StreamCommands"
         )
 
         # ----------------------------------------------------

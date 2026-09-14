@@ -7,6 +7,7 @@ from twitchio.ext import commands
 
 from components.general import GeneralCommands
 from components.moderation import ModerationCommands
+from components.stream import StreamCommands
 
 
 # ============================================================
@@ -37,6 +38,7 @@ OUTPUT_FILE = Path("website/commands.json")
 COMPONENTS = [
     GeneralCommands,
     ModerationCommands,
+    StreamCommands,
 ]
 
 
