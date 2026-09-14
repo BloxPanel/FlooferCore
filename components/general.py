@@ -54,12 +54,12 @@ class GeneralCommands(commands.Component):
     # UPTIME
     # ========================================================
 
-    @commands.command(name="uptime")
+    @commands.command(name="runtime", aliases=["up"])
     @site_command(
         description="Shows how long FlooferCore has been running.",
         category="General",
         permission="Everyone",
-        usage="!uptime",
+        usage="!runtime",
     )
     async def uptime(self, ctx: commands.Context) -> None:
         """
