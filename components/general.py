@@ -153,3 +153,20 @@ class GeneralCommands(commands.Component):
             "Join the Discord server: "
             "https://discord.gg/QwJJ2M877z"
         )
+
+    @commands.command(
+        name="lurk"
+    )
+    @site_command(
+        description="Lets the streamer know you're lurking.",
+        category="General",
+        permission="Everyone",
+        usage="!lurk",
+    )
+    async def lurk(
+        self,
+        ctx: commands.Context,
+    ) -> None:
+        await ctx.send(
+            f"{ctx.chatter.display_name} has fallen into the fluffy realms of VRChat and is now lurking."
+        )
