@@ -193,7 +193,7 @@ class GeneralCommands(commands.Component):
         percentage = random.randint(0, 100)
 
         if ctx.chatter.display_name.lower() == "silasdafloofer":
-            msg = f"{ctx.chatter.display_name} is 100% gay!"
+            msg = f"{ctx.chatter.display_name} is 150% gay!"
         else:
             msg = f"{ctx.chatter.display_name} is {percentage}% gay!"
 
@@ -223,7 +223,7 @@ class GeneralCommands(commands.Component):
         percentage = random.randint(0, 100)
 
         if ctx.chatter.display_name.lower() == "silasdafloofer":
-            msg = f"{ctx.chatter.display_name} is 100% zesty!"
+            msg = f"{ctx.chatter.display_name} is 150% zesty!"
         else:
             msg = f"{ctx.chatter.display_name} is {percentage}% zesty!"
         
