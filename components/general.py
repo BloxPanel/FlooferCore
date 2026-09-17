@@ -170,3 +170,53 @@ class GeneralCommands(commands.Component):
         await ctx.send(
             f"{ctx.chatter.display_name} has fallen into the fluffy realms of VRChat and is now lurking."
         )
+
+    @commands.command(
+        name="gay"
+    )
+    @site_command(
+        description="Shows a percentage of the gayness for the user",
+        category="General",
+        permission="Everyone",
+        usage="!gay",
+    )
+    async def gay(
+        self,
+        ctx: commands.Context,
+    ):
+        """
+        Displays a random percentage of gayness for the user.
+        """
+
+        import random
+
+        percentage = random.randint(0, 100)
+
+        await ctx.send(
+            f"{ctx.chatter.display_name} is {percentage}% gay!"
+        )
+    
+    @commands.command(
+        name="zesty"
+    )
+    @site_command(
+        description="Shows a percentage of the zestiness for the user",
+        category="General",
+        permission="Everyone",
+        usage="!zesty",
+    )
+    async def zesty(
+        self,
+        ctx: commands.Context,
+    ):
+        """
+        Displays a random percentage of zestiness for the user.
+        """
+
+        import random
+
+        percentage = random.randint(0, 100)
+
+        await ctx.send(
+            f"{ctx.chatter.display_name} is {percentage}% zesty!"
+        )
