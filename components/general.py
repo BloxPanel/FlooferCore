@@ -230,11 +230,3 @@ class GeneralCommands(commands.Component):
         await ctx.send(
             msg
         )
-
-    @commands.command(
-        name="floofgay",
-    )
-    async def floofgay(self, ctx: commands.Context) -> None:
-        await ctx.send(
-            f"@silasdafloofer is 150% gay!"
-        )
