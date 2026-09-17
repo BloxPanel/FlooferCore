@@ -198,7 +198,7 @@ class GeneralCommands(commands.Component):
             msg = f"{ctx.chatter.display_name} is {percentage}% gay!"
 
         await ctx.send(
-            {msg}
+            msg
         )
     
     @commands.command(
@@ -228,5 +228,5 @@ class GeneralCommands(commands.Component):
             msg = f"{ctx.chatter.display_name} is {percentage}% zesty!"
         
         await ctx.send(
-            {msg}
+            msg
         )
