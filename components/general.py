@@ -194,6 +194,8 @@ class GeneralCommands(commands.Component):
 
         if ctx.chatter.display_name.lower() == "silasdafloofer":
             msg = f"{ctx.chatter.display_name} is 150% gay!"
+        elif ctx.chatter.display_name.lower() == "buzzard1234512":
+            msg = f"{ctx.chatter.display_name} is 200% gay!"
         else:
             msg = f"{ctx.chatter.display_name} is {percentage}% gay!"
 
@@ -224,6 +226,8 @@ class GeneralCommands(commands.Component):
 
         if ctx.chatter.display_name.lower() == "silasdafloofer":
             msg = f"{ctx.chatter.display_name} is 150% zesty!"
+        elif ctx.chatter.display_name.lower() == "buzzard1234512":
+            msg = f"{ctx.chatter.display_name} is 200% zesty!"
         else:
             msg = f"{ctx.chatter.display_name} is {percentage}% zesty!"
         
